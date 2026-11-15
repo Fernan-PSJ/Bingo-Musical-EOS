@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>¡20 cumpleaños de Adriana! · Bingo musical</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --pink:#ff4fa3; --orange:#ff9f1c; --teal:#2ec4b6; --violet:#7b2ff7; --yellow:#ffe066; --cyan:#4cf0ff; --ink:#2b2140; --paper:rgba(255,255,255,.9); }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; min-height:100vh; font-family:"Fredoka", system-ui, sans-serif; color:var(--ink); overflow-x:hidden;
+    background: radial-gradient(circle at 15% 0%, #ffd1ea 0, transparent 45%),
+                radial-gradient(circle at 85% 10%, #bff3ff 0, transparent 40%),
+                linear-gradient(160deg, #fff4c2 0%, #ffc6e6 45%, #d2c2ff 100%);
+    background-attachment: fixed;
+  }
+
+  .ball-wrap { position:relative; z-index:2; height:150px; display:flex; justify-content:center; }
+  .ball-wrap::before { content:""; position:absolute; top:0; left:50%; width:2px; height:52px; background:rgba(43,33,64,.4); transform:translateX(-50%); }
+  .ball {
+    position:absolute; top:44px; width:110px; height:110px; border-radius:50%;
+    background:
+      radial-gradient(circle at 32% 28%, rgba(255,255,255,.95) 0 8%, transparent 18%),
+      repeating-linear-gradient(0deg, rgba(120,120,150,.35) 0 2px, transparent 2px 10px),
+      repeating-linear-gradient(90deg, rgba(120,120,150,.35) 0 2px, transparent 2px 10px),
+      radial-gradient(circle at 35% 30%, #ffffff, #d7d9ea 40%, #7d80a0 100%);
+    box-shadow: 0 0 30px rgba(255,255,255,.9), 0 0 60px rgba(76,240,255,.6);
+    animation: spin 9s linear infinite;
+    z-index:2;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .beam {
+    position:fixed; top:-10vh; width:38vw; height:120vh; z-index:0; pointer-events:none; mix-blend-mode:screen; opacity:.45;
+    transform-origin:top center; animation: sweep 7s ease-in-out infinite alternate;
+  }
+  .beam.b1 { left:-10vw; background:linear-gradient(180deg, rgba(255,79,163,.7), transparent 70%); clip-path:polygon(45% 0, 55% 0, 100% 100%, 0 100%); }
+  .beam.b2 { right:-10vw; background:linear-gradient(180deg, rgba(76,240,255,.7), transparent 70%); clip-path:polygon(45% 0, 55% 0, 100% 100%, 0 100%); animation-delay:-3s; }
+  @keyframes sweep { from { transform: rotate(-18deg); } to { transform: rotate(18deg); } }
+
+  .glitter { position:fixed; z-index:0; pointer-events:none; color:#fff; text-shadow:0 0 10px #fff, 0 0 18px var(--cyan); animation: twinkle 1.8s ease-in-out infinite; }
+  .glitter.gold { color:var(--yellow); text-shadow:0 0 10px var(--yellow); }
+  @keyframes twinkle { 0%,100% { opacity:.15; transform: scale(.7); } 50% { opacity:1; transform: scale(1.2); } }
+  .dot { position:fixed; width:6px; height:6px; border-radius:50%; background:#fff; z-index:0; pointer-events:none; box-shadow:0 0 8px #fff; animation: blink 1.2s steps(2, start) infinite; }
+  @keyframes blink { 50% { opacity:0; } }
+
+  .confetti { position:fixed; top:-20px; width:10px; height:14px; border-radius:3px; pointer-events:none; animation: fall linear forwards; z-index:3; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity:.2; } }
+
+  .content { position:relative; z-index:1; }
+  header { text-align:center; padding:0 16px 4px; }
+  .eq { display:flex; justify-content:center; align-items:flex-end; gap:4px; height:34px; margin-bottom:6px; }
+  .eq span { width:6px; border-radius:3px; background:linear-gradient(180deg, var(--cyan), var(--pink)); animation: eq 0.9s ease-in-out infinite alternate; }
+  .eq span:nth-child(odd) { animation-duration:.6s; }
+  .eq span:nth-child(3n) { animation-duration:1.1s; }
+  @keyframes eq { from { height:6px; } to { height:34px; } }
+  .banner {
+    display:inline-block; font-size:14px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+    background:#120a26; color:var(--cyan); padding:6px 16px; border-radius:999px; border:2px solid var(--cyan);
+    box-shadow:0 0 14px rgba(76,240,255,.8), inset 0 0 8px rgba(76,240,255,.5);
+  }
+  h1 {
+    margin:14px 0 4px; font-size:clamp(34px, 6vw, 60px); line-height:1.05; font-weight:700;
+    background: linear-gradient(90deg, var(--pink), var(--yellow), var(--cyan), var(--pink), var(--yellow));
+    background-size: 300% 100%;
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    animation: shimmer 4s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(255,79,163,.45));
+  }
+  @keyframes shimmer { to { background-position: 300% 0; } }
+  .sub { font-size:16px; font-weight:600; color:#5b4b7a; }
+
+  .panel { display:flex; flex-wrap:wrap; gap:16px; padding:16px 20px; justify-content:center; }
+  .box {
+    background:var(--paper); backdrop-filter: blur(6px); border-radius:24px; padding:18px 20px;
+    box-shadow: 0 10px 0 rgba(43,33,64,.12), 0 0 0 2px rgba(255,255,255,.7), 0 14px 30px rgba(123,47,247,.25);
+  }
+  .caller { flex:1 1 360px; max-width:560px; text-align:center; }
+  .label { font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--violet); }
+  .now { font-size:clamp(22px, 4vw, 30px); font-weight:700; margin:8px 0 2px; min-height:40px; background: linear-gradient(90deg, var(--orange), var(--pink), var(--violet)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .now-artist { font-size:15px; color:#6b5b8c; min-height:20px; }
+  .btns { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; justify-content:center; }
+  button { font:inherit; font-weight:700; font-size:15px; padding:10px 18px; border-radius:16px; border:none; cursor:pointer; background:#fff; color:var(--ink); box-shadow:0 4px 0 #d9cfe9; transition: transform .08s, box-shadow .08s; }
+  button:active { transform: translateY(3px); box-shadow:0 1px 0 #d9cfe9; }
+  button.primary { background: linear-gradient(135deg, var(--pink), var(--violet)); color:#fff; box-shadow:0 4px 0 #4b13a8, 0 0 14px rgba(255,79,163,.6); }
+  .listen { display:inline-block; margin-top:12px; padding:9px 16px; border-radius:16px; background:linear-gradient(135deg, var(--teal), #4cc9f0); color:#fff; font-weight:700; text-decoration:none; box-shadow:0 4px 0 #1f8f85, 0 0 12px rgba(76,240,255,.6); }
+  .count { font-size:14px; font-weight:600; color:#5b4b7a; margin-top:10px; }
+  .history { font-size:13px; color:#5b4b7a; line-height:1.6; max-height:110px; overflow:auto; margin-top:8px; text-align:left; }
+  .gen { min-width:230px; text-align:center; }
+  .gen label { font-size:14px; font-weight:600; display:block; margin-bottom:8px; }
+  input[type=number] { width:100px; font:inherit; font-weight:700; font-size:16px; padding:8px 10px; border-radius:14px; border:3px solid var(--cyan); text-align:center; }
+  .genmsg { font-size:13px; color:#5b4b7a; margin-top:8px; min-height:18px; }
+
+  .note { text-align:center; font-size:14px; font-weight:600; color:#5b4b7a; padding:8px 20px 4px; }
+
+  .cards { display:grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap:22px; padding:16px 20px 50px; }
+  .tablero { background:#fff; border-radius:26px; padding:14px; position:relative; box-shadow: 0 8px 0 rgba(43,33,64,.1), 0 0 0 2px rgba(76,240,255,.35), 0 16px 30px rgba(123,47,247,.2); }
+  .tablero::before { content:"✦"; position:absolute; top:-12px; right:18px; font-size:22px; color:var(--yellow); text-shadow:0 0 8px var(--yellow); }
+  .tablero:nth-child(3n+1) { transform: rotate(-1deg); }
+  .tablero:nth-child(3n+2) { transform: rotate(.8deg); }
+  .tablero:nth-child(3n) { transform: rotate(-.5deg); }
+  .tablero-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .tablero-title { font-size:18px; font-weight:700; color:var(--violet); }
+  .tbtns { display:flex; align-items:center; gap:6px; }
+  .xbtn { padding:3px 9px; font-size:13px; line-height:1; border-radius:999px; background:#ffe6f4; color:#a4306b; box-shadow:none; }
+  .status { font-size:13px; font-weight:700; color:#fff; background:var(--teal); border-radius:999px; padding:4px 12px; }
+  .status.bingo { background: linear-gradient(135deg, var(--pink), var(--orange)); animation: pulse 1s infinite alternate; }
+  @keyframes pulse { to { transform: scale(1.08); } }
+  .pname { width:100%; margin:0 0 10px; font:inherit; font-weight:700; font-size:14px; padding:7px 10px; border-radius:12px; border:2px dashed var(--cyan); background:#faf9ff; color:var(--ink); }
+  .pname:focus { outline:none; border-style:solid; border-color:var(--pink); box-shadow:0 0 10px rgba(255,79,163,.4); }
+
+  .grid { display:grid; grid-template-columns: repeat(5, 1fr); gap:6px; }
+  .cell { position:relative; height:66px; border-radius:14px; padding:4px 3px; font-size:10.5px; line-height:1.15; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; overflow:hidden; background:#f6f2ff; border:2px solid #e6dcff; cursor:pointer; user-select:none; transition: transform .1s; }
+  .cell .t { font-weight:700; font-size:11px; }
+  .cell .a { color:#6b5b8c; font-size:9.5px; margin-top:2px; }
+  .cell .tag { position:absolute; top:2px; left:4px; font-size:8.5px; font-weight:700; opacity:.85; }
+  .cell.d80 { background:linear-gradient(135deg,#ffd1ec,#ff9fd0); border-color:#ff7ac0; }
+  .cell.d90 { background:linear-gradient(135deg,#c8fff7,#7fe8dc); border-color:#2ec4b6; }
+  .cell.d2010 { background:linear-gradient(135deg,#ffe0b8,#ffb36b); border-color:#ff9f1c; }
+  .cell.d2020 { background:linear-gradient(135deg,#e7dcff,#b99cff); border-color:#7b2ff7; }
+  .cell.called { box-shadow: 0 0 0 3px var(--yellow), 0 0 14px rgba(255,224,102,.9); }
+  .cell.marked { background: linear-gradient(135deg, #2b2140, #5b2fb0); color:#fff; border-color:#2b2140; }
+  .cell.marked .a, .cell.marked .tag { color:var(--yellow); opacity:1; }
+  .cell.marked::after { content:"★"; position:absolute; right:4px; bottom:2px; color:var(--yellow); font-size:14px; text-shadow:0 0 6px var(--yellow); }
+  .cell.blocked { cursor:not-allowed; filter:saturate(.45); opacity:.8; }
+  .cell:not(.blocked):hover { transform: scale(1.04); }
+
+  .foot { text-align:center; font-size:15px; font-weight:700; color:#5b4b7a; padding:0 20px 40px; }
+</style>
+</head>
+<body>
+
+<div class="ball-wrap" aria-hidden="true"><div class="ball"></div></div>
+<div class="beam b1" aria-hidden="true"></div>
+<div class="beam b2" aria-hidden="true"></div>
+
+<div class="content">
+  <header>
+    <div class="eq" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <span class="banner">✨ Noche de disco · 20 años ✨</span>
+    <h1>¡20 cumpleaños de Adriana!</h1>
+    <div class="sub">Bingo musical · años 80, 90, 2010 y 2020 · cada cartón tiene 25 canciones</div>
+  </header>
+
+  <div class="panel">
+    <div class="box caller">
+      <div class="label">🎧 Sonando ahora</div>
+      <div class="now" id="now">Pulsa «¡Suena!» para empezar</div>
+      <div class="now-artist" id="artist"></div>
+      <div id="listen"></div>
+      <div class="btns">
+        <button class="primary" id="nextBtn">🪩 ¡Suena!</button>
+        <button id="resetBtn">🔄 Nueva partida</button>
+      </div>
+      <div class="count" id="count"></div>
+      <div class="history" id="history"></div>
+    </div>
+
+    <div class="box gen">
+      <div class="label">🎟️ Cartones</div>
+      <label for="n" style="margin-top:8px">¿Cuántos jugadores?</label>
+      <input type="number" id="n" min="1" max="60" value="12">
+      <div class="btns"><button class="primary" id="genBtn">✨ Generar cartones</button><button id="addBtn">＋ Añadir jugador</button></div>
+      <div class="genmsg" id="genMsg"></div>
+    </div>
+  </div>
+
+  <div class="note">Reparto: 6 de los 80 · 6 de los 90 · 19 de los 2010 · 19 de los 2020 (24 en español y 26 en inglés). Toca una casilla cuando su canción ya haya sonado para ponerle estrella ★.</div>
+
+  <div class="cards" id="cards"></div>
+  <div class="foot">🪩 ¡Feliz cumpleaños, Adriana! 🪩</div>
+</div>
+
+<script>
+const POOL = [
+  {t:"Hoy no me puedo levantar", a:"Mecano", d:"80", l:"ES"},
+  {t:"Bambú", a:"Miguel Bosé", d:"80", l:"ES"},
+  {t:"Billie Jean", a:"Michael Jackson", d:"80", l:"EN"},
+  {t:"Take On Me", a:"a-ha", d:"80", l:"EN"},
+  {t:"Like a Virgin", a:"Madonna", d:"80", l:"EN"},
+  {t:"The Winner Takes It All", a:"ABBA", d:"80", l:"EN"},
+
+  {t:"Entre dos tierras", a:"Héroes del Silencio", d:"90", l:"ES"},
+  {t:"Corazón partío", a:"Alejandro Sanz", d:"90", l:"ES"},
+  {t:"Smells Like Teen Spirit", a:"Nirvana", d:"90", l:"EN"},
+  {t:"Wannabe", a:"Spice Girls", d:"90", l:"EN"},
+  {t:"Livin' la Vida Loca", a:"Ricky Martin", d:"90", l:"EN"},
+  {t:"Rayando el sol", a:"Maná", d:"90", l:"ES"},
+
+  {t:"Despacito", a:"Luis Fonsi ft. Daddy Yankee", d:"2010", l:"ES"},
+  {t:"Mi gente", a:"J Balvin & Willy William", d:"2010", l:"ES"},
+  {t:"Vivir mi vida", a:"Marc Anthony", d:"2010", l:"ES"},
+  {t:"Bailando", a:"Enrique Iglesias ft. Descemer Bueno y Gente de Zona", d:"2010", l:"ES"},
+  {t:"Chantaje", a:"Shakira ft. Maluma", d:"2010", l:"ES"},
+  {t:"Felices los 4", a:"Maluma", d:"2010", l:"ES"},
+  {t:"Hasta el amanecer", a:"Nicky Jam", d:"2010", l:"ES"},
+  {t:"Tusa", a:"Karol G & Nicki Minaj", d:"2010", l:"ES"},
+  {t:"Rolling in the Deep", a:"Adele", d:"2010", l:"EN"},
+  {t:"Uptown Funk", a:"Mark Ronson ft. Bruno Mars", d:"2010", l:"EN"},
+  {t:"Shape of You", a:"Ed Sheeran", d:"2010", l:"EN"},
+  {t:"Havana", a:"Camila Cabello ft. Young Thug", d:"2010", l:"EN"},
+  {t:"Shake It Off", a:"Taylor Swift", d:"2010", l:"EN"},
+  {t:"Happy", a:"Pharrell Williams", d:"2010", l:"EN"},
+  {t:"Someone You Loved", a:"Lewis Capaldi", d:"2010", l:"EN"},
+  {t:"Hotline Bling", a:"Drake", d:"2010", l:"EN"},
+  {t:"Blinding Lights", a:"The Weeknd", d:"2010", l:"EN"},
+  {t:"Can't Feel My Face", a:"The Weeknd", d:"2010", l:"EN"},
+  {t:"Just the Way You Are", a:"Bruno Mars", d:"2010", l:"EN"},
+
+  {t:"Tití me preguntó", a:"Bad Bunny", d:"2020", l:"ES"},
+  {t:"Hawái", a:"Maluma", d:"2020", l:"ES"},
+  {t:"Provenza", a:"Karol G", d:"2020", l:"ES"},
+  {t:"Pepas", a:"Farruko", d:"2020", l:"ES"},
+  {t:"La Bachata", a:"Manuel Turizo", d:"2020", l:"ES"},
+  {t:"BZRP Music Sessions Vol. 53", a:"Shakira & Bizarrap", d:"2020", l:"ES"},
+  {t:"Columbia", a:"Quevedo", d:"2020", l:"ES"},
+  {t:"BZRP Music Sessions Vol. 52", a:"Bizarrap & Quevedo", d:"2020", l:"ES"},
+  {t:"Levitating", a:"Dua Lipa ft. DaBaby", d:"2020", l:"EN"},
+  {t:"Good 4 U", a:"Olivia Rodrigo", d:"2020", l:"EN"},
+  {t:"Stay", a:"The Kid LAROI & Justin Bieber", d:"2020", l:"EN"},
+  {t:"As It Was", a:"Harry Styles", d:"2020", l:"EN"},
+  {t:"Anti-Hero", a:"Taylor Swift", d:"2020", l:"EN"},
+  {t:"Flowers", a:"Miley Cyrus", d:"2020", l:"EN"},
+  {t:"Espresso", a:"Sabrina Carpenter", d:"2020", l:"EN"},
+  {t:"Die With a Smile", a:"Lady Gaga & Bruno Mars", d:"2020", l:"EN"},
+  {t:"Despechá", a:"Rosalía", d:"2020", l:"ES"},
+  {t:"Bichota", a:"Karol G", d:"2020", l:"ES"},
+  {t:"Un x100to", a:"Grupo Frontera & Bad Bunny", d:"2020", l:"ES"}
+];
+
+const CARD_SIZE = 25, COLS = 5, ROWS = 5;
+const DEC_CLASS = {"80":"d80","90":"d90","2010":"d2010","2020":"d2020"};
+const PALETTE = ['#ff4fa3','#ffe066','#4cf0ff','#7b2ff7','#ff9f1c','#ffffff'];
+let cards = [], order = [], called = [], calledTitles = new Set();
+
+function decorate(){
+  const body = document.body;
+  const glyphs = ['✦','✧','★','✶'];
+  for(let i=0;i<22;i++){
+    const g = document.createElement('div');
+    g.className = 'glitter' + (i % 3 === 0 ? ' gold' : '');
+    g.textContent = glyphs[i % glyphs.length];
+    g.style.fontSize = (12 + Math.random()*16) + 'px';
+    g.style.left = (Math.random()*98) + 'vw';
+    g.style.top = (Math.random()*95) + 'vh';
+    g.style.animationDelay = (Math.random()*1.8) + 's';
+    body.appendChild(g);
+  }
+  for(let i=0;i<40;i++){
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.style.left = (Math.random()*100) + 'vw';
+    d.style.top = (Math.random()*100) + 'vh';
+    d.style.animationDelay = (Math.random()*1.2) + 's';
+    body.appendChild(d);
+  }
+}
+
+function confettiBurst(){
+  for(let i=0;i<60;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random()*100 + 'vw';
+    c.style.background = PALETTE[i % PALETTE.length];
+    c.style.animationDuration = (3 + Math.random()*3) + 's';
+    c.style.animationDelay = (Math.random()*1.5) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 7000);
+  }
+}
+
+function chime(){
+  try{
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AC();
+    [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+      const t0 = ctx.currentTime + i * 0.12;
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'triangle'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.25, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.5);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t0); o.stop(t0 + 0.55);
+    });
+  }catch(e){ /* el navegador puede bloquear el audio */ }
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr;
+}
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function setMsg(t){ document.getElementById('genMsg').textContent = t; }
+
+function generate(n){
+  const prevNames = cards.map(c => c.name || '');
+  cards = Array.from({length:n}, (_, i) => ({
+    name: prevNames[i] || '',
+    songs: shuffle(POOL.slice()).slice(0, CARD_SIZE),
+    marked: new Array(CARD_SIZE).fill(false)
+  }));
+  setMsg('¡' + n + ' cartones listos!');
+  renderCards();
+}
+
+function addCard(){
+  cards.push({
+    name: '',
+    songs: shuffle(POOL.slice()).slice(0, CARD_SIZE),
+    marked: new Array(CARD_SIZE).fill(false)
+  });
+  setMsg('Cartón ' + cards.length + ' añadido.');
+  renderCards();
+}
+
+function removeCard(ci){
+  cards.splice(ci, 1);
+  setMsg('Cartón quitado. Quedan ' + cards.length + '.');
+  renderCards();
+}
+
+function resetGame(){
+  order = shuffle(POOL.slice());
+  called = []; calledTitles = new Set();
+  cards.forEach(c => c.marked = new Array(CARD_SIZE).fill(false));
+  document.getElementById('now').textContent = 'Pulsa «¡Suena!» para empezar';
+  document.getElementById('artist').textContent = '';
+  document.getElementById('listen').innerHTML = '';
+  updateCaller(); renderCards();
+}
+
+function nextSong(){
+  if(called.length >= POOL.length){
+    document.getElementById('now').textContent = '¡Ya han sonado todas!';
+    document.getElementById('artist').textContent = '';
+    return;
+  }
+  const s = order[called.length];
+  called.push(s); calledTitles.add(s.t);
+  chime();
+  document.getElementById('now').textContent = s.t;
+  document.getElementById('artist').textContent = s.a + ' · ' + s.d + ' · ' + (s.l === 'ES' ? 'en español' : 'en inglés');
+  const q = encodeURIComponent(s.t + ' ' + s.a);
+  document.getElementById('listen').innerHTML = '<a class="listen" href="https://open.spotify.com/search/' + q + '" target="_blank" rel="noopener">▶ Escuchar en Spotify</a>';
+  updateCaller(); renderCards();
+}
+
+function updateCaller(){
+  document.getElementById('count').textContent = 'Sonadas: ' + called.length + ' de ' + POOL.length;
+  document.getElementById('history').innerHTML = called.map((s,i) => (i+1) + '. ' + s.t + ' (' + s.a + ')').join('<br>');
+}
+
+function cardStatus(card){
+  const m = card.marked;
+  if(m.every(Boolean)) return {label:'🏆 ¡BINGO!', cls:'bingo'};
+  for(let r=0;r<ROWS;r++){ let f=true; for(let c=0;c<COLS;c++) if(!m[r*COLS+c]){f=false;break;} if(f) return {label:'⭐ ¡Línea!', cls:''}; }
+  for(let c=0;c<COLS;c++){ let f=true; for(let r=0;r<ROWS;r++) if(!m[r*COLS+c]){f=false;break;} if(f) return {label:'⭐ ¡Línea!', cls:''}; }
+  return null;
+}
+
+function toggle(ci, idx){
+  const card = cards[ci], song = card.songs[idx];
+  if(!calledTitles.has(song.t)){ setMsg('Esa canción todavía no ha sonado 🎧'); return; }
+  card.marked[idx] = !card.marked[idx];
+  renderCards();
+}
+
+function renderCards(){
+  const wrap = document.getElementById('cards');
+  wrap.innerHTML = '';
+  cards.forEach((card, ci) => {
+    const div = document.createElement('div');
+    div.className = 'tablero';
+    const st = cardStatus(card);
+    div.innerHTML = '<div class="tablero-head"><span class="tablero-title">Cartón ' + (ci+1) + ' 🪩</span><span class="tbtns">' +
+      (st ? '<span class="status ' + st.cls + '">' + st.label + '</span>' : '') + '<button class="xbtn" title="Quitar cartón">✕</button></span></div>' +
+      '<input class="pname" type="text" maxlength="24" placeholder="Nombre del jugador" value="' + esc(card.name) + '">';
+    div.querySelector('.pname').oninput = e => { card.name = e.target.value; };
+    div.querySelector('.xbtn').onclick = () => removeCard(ci);
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+    card.songs.forEach((s, idx) => {
+      const cell = document.createElement('div');
+      const isCalled = calledTitles.has(s.t), isMarked = card.marked[idx];
+      cell.className = 'cell ' + DEC_CLASS[s.d] + (isMarked ? ' marked' : '') + (isCalled && !isMarked ? ' called' : '') + (isCalled ? '' : ' blocked');
+      cell.innerHTML = '<span class="tag">' + s.d + '</span><span class="t">' + s.t + '</span><span class="a">' + s.a + '</span>';
+      cell.onclick = () => toggle(ci, idx);
+      grid.appendChild(cell);
+    });
+    div.appendChild(grid);
+    wrap.appendChild(div);
+  });
+}
+
+document.getElementById('addBtn').onclick = addCard;
+
+document.getElementById('genBtn').onclick = () => {
+  const n = Math.max(1, Math.min(60, parseInt(document.getElementById('n').value, 10) || 1));
+  generate(n); resetGame(); confettiBurst();
+};
+document.getElementById('nextBtn').onclick = nextSong;
+document.getElementById('resetBtn').onclick = resetGame;
+
+decorate();
+order = shuffle(POOL.slice());
+generate(12);
+updateCaller();
+</script>
+</body>
+</html>
